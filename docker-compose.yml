@@ -1,0 +1,18 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin01!
+      MYSQL_DATABASE: forProject
+    ports:
+      - '3306:3306'
