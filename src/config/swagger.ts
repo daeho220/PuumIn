@@ -16,6 +16,20 @@ const options = {
                 description: 'Local server',
             },
         ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
     },
     apis: ['./src/routes/*.ts', './src/models/*.ts'], // 경로는 프로젝트 구조에 따라 조정
 };
