@@ -1,5 +1,5 @@
 import express from 'express';
-import authController from '../controllers/authController';
+import { register, login } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -71,7 +71,7 @@ const router = express.Router();
  *         description: Some server error
  */
 
-router.post('/register', authController.register);
+router.post('/register', register);
 
 /**
  * @swagger
@@ -101,6 +101,6 @@ router.post('/register', authController.register);
  *         description: Some server error
  */
 
-router.post('/login', authController.login);
+router.post('/login', login);
 
 export default router;
