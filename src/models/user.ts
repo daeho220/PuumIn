@@ -19,4 +19,8 @@ const findByEmail = async (email: string): Promise<User | undefined> => {
     return rows[0] as User | undefined;
 };
 
-export default { create, findByEmail };
+const deleteAll = async () => {
+    await pool.query('DELETE FROM Users');
+};
+
+export default { create, findByEmail, deleteAll};

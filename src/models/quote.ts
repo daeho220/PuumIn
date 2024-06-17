@@ -19,4 +19,8 @@ const findAllPublic = async () => {
     return rows;
 };
 
-export default { create, findAllPublic };
+const deleteAll = async () => {
+    await pool.query('DELETE FROM Quotes');
+};
+
+export default { create, findAllPublic, deleteAll };
