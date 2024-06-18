@@ -12,8 +12,8 @@ const getAllPublicQuotes = async (req: Request, res: Response) => {
 
 const createQuote = async (req: Request, res: Response) => {
     try {
-        const { content, author, is_public, user_id } = req.body;
-        const quoteId = await Quote.create({ content, author, is_public, user_id });
+        const { content, author, is_public, user_idx } = req.body;
+        const quoteId = await Quote.create({ content, author, is_public, user_idx });
         res.status(201).json({ 
             id: quoteId,
             author: author,

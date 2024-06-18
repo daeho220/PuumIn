@@ -14,7 +14,7 @@ const router = express.Router();
  *         - content
  *         - author
  *         - is_public
- *         - user_id
+ *         - user_idx
  *       properties:
  *         content:
  *           type: string
@@ -25,14 +25,14 @@ const router = express.Router();
  *         is_public:
  *           type: boolean
  *           description: Whether the quote is public
- *         user_id:
+ *         user_idx:
  *           type: integer
  *           description: The ID of the user who created the quote
  *       example:
  *         content: "This is a sample quote."
  *         author: "John Doe"
  *         is_public: true
- *         user_id: 1
+ *         user_idx: 1
  */
 
 /**
@@ -99,4 +99,13 @@ router.get('/quotes', getAllPublicQuotes);
  */
 router.post('/quotes', authMiddleware, createQuote);
 
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
 export default router;

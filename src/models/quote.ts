@@ -6,11 +6,11 @@ interface Quote {
     content: string;
     author: string;
     is_public: boolean;
-    user_id: number;
+    user_idx: number;
 }
 
 const create = async (quote: Quote) => {
-    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Quotes (content, author, is_public, user_id) VALUES (?, ?, ?, ?)', [quote.content, quote.author, quote.is_public, quote.user_id]);
+    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Quotes (content, author, is_public, user_idx) VALUES (?, ?, ?, ?)', [quote.content, quote.author, quote.is_public, quote.user_idx]);
     return result.insertId;
 };
 

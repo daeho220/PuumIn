@@ -37,7 +37,7 @@ describe('Quotes API', () => {
             content: 'This is a test quote',
             author: 'John Doe',
             is_public: true,
-            user_id: userId,
+            user_idx: userId,
         };
         const response = await request(app)
             .post('/api/quotes')
