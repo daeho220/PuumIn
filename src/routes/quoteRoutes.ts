@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllPublicQuotes, createQuote } from '../controllers/quoteController';
+import { getAllPublicQuotes, createQuote, deleteQuote } from '../controllers/quoteController';
 import authMiddleware from '../middlewares/authMiddleware';
 
 const router = express.Router();
@@ -101,11 +101,27 @@ router.post('/quotes', authMiddleware, createQuote);
 
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ * /api/quotes/{id}:
+ *   delete:
+ *     summary: Delete a quote
+ *     tags: [Quotes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The quote ID
+ *     responses:
+ *       200:
+ *         description: Quote deleted successfully
+ *       404:
+ *         description: Quote not found
+ *       500:
+ *         description: Some server error
  */
+router.delete('/quotes/:id', authMiddleware, deleteQuote);
+
 export default router;

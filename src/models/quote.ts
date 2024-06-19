@@ -19,8 +19,13 @@ const findAllPublic = async () => {
     return rows;
 };
 
+const deleteById = async (id: number) => {
+    const [result] = await pool.query<ResultSetHeader>('DELETE FROM Quotes WHERE id = ?', [id]);
+    return result.affectedRows > 0;
+};
+
 const deleteAll = async () => {
     await pool.query('DELETE FROM Quotes');
 };
 
-export default { create, findAllPublic, deleteAll };
+export default { create, findAllPublic, deleteById, deleteAll };

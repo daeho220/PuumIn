@@ -27,4 +27,27 @@ const createQuote = async (req: Request, res: Response) => {
     }
 };
 
-export { getAllPublicQuotes, createQuote };
+const deleteQuote = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const success = await Quote.deleteById(Number(id));
+        if (success) {
+            res.status(200).json({
+                id: id,
+                message: 'Quote deleted successfully' 
+            });
+        } else {
+            res.status(404).json({ 
+                error: 'Quote not found',
+                message: 'Failed to delete quote'
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            error: error,
+            message: 'Failed to delete quote'
+        });
+    }
+};
+
+export { getAllPublicQuotes, createQuote, deleteQuote };
