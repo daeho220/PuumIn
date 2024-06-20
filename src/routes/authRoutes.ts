@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login } from '../controllers/authController';
+import { register, login, logout } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -102,5 +102,39 @@ router.post('/register', register);
  */
 
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout a user
+ *     tags: [Auth]
+ *     description: Logs out the current user by instructing the client to delete the JWT token.
+ *     responses:
+ *       200:
+ *         description: Logout successful. Please clear your token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Logout successful. Please clear your token.'
+ *       500:
+ *         description: An error occurred during the logout process.
+ *         content:
+ *           application/json:
+ *             schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: 'An error occurred during the logout process.'
+ *               error:
+ *                 type: string
+ */
+
+router.post('/logout', logout);
 
 export default router;

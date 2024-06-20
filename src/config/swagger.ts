@@ -6,9 +6,9 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'When You Feel Bad',
+            title: 'PuumIn',
             version: '1.0.0',
-            description: 'API documentation for \'When You Feel Bad\'',
+            description: 'API documentation for \'PuumIn\'',
         },
         servers: [
             {

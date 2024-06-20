@@ -13,7 +13,7 @@ const register = async (req: Request, res: Response) => {
             email: email,
             username: username,
             message: 'Registration Success',
-         });
+        });
     } catch (error) {
         res.status(500).json({ 
             error: error,
@@ -42,4 +42,16 @@ const login = async (req: Request, res: Response) => {
     }
 };
 
-export { register, login };
+const logout = async (req: Request, res: Response) => {
+    try {
+        res.status(200).send({
+            message: 'Logout successful. Please clear your token.'
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: 'An error occurred during the logout process.', error: error
+        });
+    }
+};
+
+export { register, login, logout };
