@@ -67,4 +67,19 @@ const deleteQuote = async (req: Request, res: Response) => {
     }
 };
 
-export { getAllPublicQuotes, createQuote, deleteQuote };
+const reportQuote = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const reportsCount = await Quote.reportById(Number(id));
+        if (reportsCount >= 10) {
+            await Quote.updatePublicStatus(Number(id), false);
+            res.status(200).send({ message: 'The quote has been set to private.' });
+        } else {
+            res.status(200).send({ message: 'Report has been registered.', reportsCount });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Server error occurred.' });
+    }
+};
+
+export { getAllPublicQuotes, createQuote, deleteQuote, reportQuote };

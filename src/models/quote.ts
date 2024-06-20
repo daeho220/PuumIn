@@ -44,4 +44,19 @@ const deleteAll = async () => {
     await pool.query('DELETE FROM Quotes');
 };
 
-export default { create, findAllPublic, deleteById, deleteAll };
+const reportById = async (id: number) => {
+    // 신고 횟수 증가
+    await pool.query<ResultSetHeader>('UPDATE Quotes SET reports_count = reports_count + 1 WHERE id = ?', [id]);
+
+    // 신고 횟수 확인
+    const [result] = await pool.query<RowDataPacket[]>('SELECT reports_count FROM quotes WHERE id = ?', [id]);
+    const reportsCount = result.length > 0 ? result[0].reports_count : 0;
+
+    return reportsCount;
+};
+
+const updatePublicStatus = async (id: number, isPublic: boolean) => {
+    await pool.query<ResultSetHeader>('UPDATE Quotes SET is_public = ? WHERE id = ?', [isPublic ? 1 : 0, id]);
+};
+
+export default { create, findAllPublic, deleteById, deleteAll, reportById, updatePublicStatus };
