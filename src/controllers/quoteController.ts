@@ -3,10 +3,27 @@ import Quote from '../models/quote';
 
 const getAllPublicQuotes = async (req: Request, res: Response) => {
     try {
-        const quotes = await Quote.findAllPublic();
-        res.json(quotes);
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+
+        // 데이터베이스에서 인용구 가져오기 (예시 코드)
+        const quotes = await Quote.findAllPublic(page, limit);
+
+        const totalPages = quotes.totalPages;
+        const totalItemCount = quotes.totalItemCount;
+        const data = quotes.data;
+
+        res.status(200).json({
+            currentPage: page,
+            totalPages: totalPages,
+            totalItemCount: totalItemCount,
+            data: data
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve quotes' });
+        res.status(500).json({
+            message: 'Failed to retrieve quotes',
+            error: error
+        });
     }
 };
 

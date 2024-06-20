@@ -70,7 +70,7 @@ router.post('/send-code', sendCode);
  *                 description: The verification code
  *             example:
  *               email: user@example.com
- *               code: 123456
+ *               code: "123456"
  *     responses:
  *       200:
  *         description: Verification successful

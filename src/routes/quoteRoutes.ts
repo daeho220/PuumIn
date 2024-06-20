@@ -46,17 +46,44 @@ const router = express.Router();
  * @swagger
  * /api/quotes:
  *   get:
- *     summary: Get all public quotes
+ *     summary: Get all public quotes with pagination
  *     tags: [Quotes]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number of the quotes listing
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of quotes per page
  *     responses:
  *       200:
- *         description: A list of public quotes
+ *         description: A paginated list of public quotes
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Quote'
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Current page number
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Total number of pages
+ *                 totalItems:
+ *                   type: integer
+ *                   description: Total number of quotes
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Quote'
+ *       500:
+ *         description: Server error
  */
 router.get('/quotes', getAllPublicQuotes);
 
@@ -65,6 +92,8 @@ router.get('/quotes', getAllPublicQuotes);
  * /api/quotes:
  *   post:
  *     summary: Create a new quote
+ *     description: >
+ *       "Required JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
  *     tags: [Quotes]
  *     security:
  *       - bearerAuth: []
@@ -104,6 +133,8 @@ router.post('/quotes', authMiddleware, createQuote);
  * /api/quotes/{id}:
  *   delete:
  *     summary: Delete a quote
+ *     description: >
+ *       "Required JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
  *     tags: [Quotes]
  *     security:
  *       - bearerAuth: []
