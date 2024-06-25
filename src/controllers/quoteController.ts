@@ -46,13 +46,12 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
 
 const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) => {
     try {
-        const { content, author, is_public, user_idx } = req.body;
-        const quoteId = await Quote.create({ content, author, is_public, user_idx });
+        const { content, is_public, user_idx } = req.body;
+        const quoteId = await Quote.create({ content, is_public, user_idx });
         res.status(201).json({ 
             message: 'Success to create quote',
             data: {
                 id: quoteId,
-                author: author,
                 content: content,
                 isPublic: is_public,
                 userIdx: user_idx

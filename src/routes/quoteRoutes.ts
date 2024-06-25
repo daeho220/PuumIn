@@ -12,16 +12,12 @@ const router = express.Router();
  *       type: object
  *       required:
  *         - content
- *         - author
  *         - is_public
  *         - user_idx
  *       properties:
  *         content:
  *           type: string
  *           description: The quote content
- *         author:
- *           type: string
- *           description: The author of the quote
  *         is_public:
  *           type: boolean
  *           description: Whether the quote is public
@@ -30,7 +26,6 @@ const router = express.Router();
  *           description: The ID of the user who created the quote
  *       example:
  *         content: "This is a sample quote."
- *         author: "John Doe"
  *         is_public: true
  *         user_idx: 1
  */
@@ -102,7 +97,21 @@ router.get('/quotes', getAllPublicQuotes);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Quote'
+ *             type: object
+ *             required:
+ *               - content
+ *               - is_public
+ *               - user_idx
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The quote content
+ *               is_public:
+ *                 type: boolean
+ *                 description: Whether the quote is public
+ *               user_idx:
+ *                 type: integer
+ *                 description: The ID of the user who created the quote
  *     responses:
  *       201:
  *         description: The quote was successfully created
@@ -114,9 +123,6 @@ router.get('/quotes', getAllPublicQuotes);
  *                 id:
  *                   type: integer
  *                   description: The ID of the newly created quote
- *                 author:
- *                   type: string
- *                   description: The author of the newly created quote
  *                 message:
  *                   type: string
  *                   description: A success message

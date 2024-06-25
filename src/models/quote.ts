@@ -4,13 +4,13 @@ import { ResultSetHeader, RowDataPacket } from 'mysql2';
 interface Quote {
     id?: number;
     content: string;
-    author: string;
+    author?: string;
     is_public: boolean;
     user_idx: number;
 }
 
 const create = async (quote: Quote) => {
-    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Quotes (content, author, is_public, user_idx) VALUES (?, ?, ?, ?)', [quote.content, quote.author, quote.is_public, quote.user_idx]);
+    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Quotes (content, is_public, user_idx) VALUES (?, ?, ?)', [quote.content, quote.is_public, quote.user_idx]);
     return result.insertId;
 };
 
