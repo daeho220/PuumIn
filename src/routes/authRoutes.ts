@@ -84,7 +84,17 @@ router.post('/register', register);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *               password:
+ *                 type: string
+ *                 description: The user's password
  *     responses:
  *       200:
  *         description: The user was successfully logged in
