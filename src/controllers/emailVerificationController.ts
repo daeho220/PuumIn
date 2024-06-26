@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ApiResponse } from '../types/apiResponse';
 import redisClient from '../config/redis';
 import { sendVerificationCode } from '../utils/email';
 
@@ -14,14 +15,13 @@ const sendCode = async (req: Request, res: Response) => {
         await redisClient.set(email, code, { EX: 300 }); // 5분 유효 기간 설정
         await sendVerificationCode(email, code);
         res.status(200).json({
-             success: true,
-             message: 'Verification code sent'
+             message: 'Success'
         });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({ 
-            success: false,
-            message: 'Failed to send verification code',
-            error: error
+            message: 'Error',
+            error: errorMessage
         });
     }
 };
@@ -33,20 +33,19 @@ const verifyCode = async (req: Request, res: Response) => {
         const storedCode = await redisClient.get(email);
 
         if (storedCode !== code) {
-            return res.status(400).json({ success: false, error: 'Invalid verification code' });
+            return res.status(400).json({ message: 'Error', error: 'Invalid verification code' });
         }
 
         // Verification successful
         await redisClient.del(email);
         res.status(200).json({
-            success: true,
-            message: 'Verification successful'
+            message: 'Success',
         });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({ 
-            success: false,
-            message: 'Failed to verify code',
-            error: error
+            message: 'Error',
+            error: errorMessage
         });
     }
 };
