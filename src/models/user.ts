@@ -26,4 +26,8 @@ const createWithKakao = async (email: string, username: string): Promise<number>
     return result.insertId;
 };
 
-export default { create, findByEmail, deleteAll, createWithKakao};
+const updateSocialLoginInfo = async (userId: number, provider: string, providerId: string): Promise<void> => {
+    await pool.query<ResultSetHeader>('UPDATE Users SET provider = ?, providerId = ? WHERE id = ?', [provider, providerId, userId]);
+};
+
+export default { create, findByEmail, deleteAll, createWithKakao, updateSocialLoginInfo};
