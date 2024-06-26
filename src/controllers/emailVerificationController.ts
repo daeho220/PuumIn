@@ -33,10 +33,14 @@ const verifyCode = async (req: Request, res: Response) => {
         const storedCode = await redisClient.get(email);
 
         if (storedCode !== code) {
-            return res.status(400).json({ message: 'Error', error: 'Invalid verification code' });
+            return res.status(400).json({ 
+                message: 'Error', 
+                error: 'Invalid verification code' 
+            });
         }
 
         // Verification successful
+        await redisClient.set(`verified_${email}`, 'true', { EX: 600 }); // 10분 동안 유효
         await redisClient.del(email);
         res.status(200).json({
             message: 'Success',

@@ -4,12 +4,33 @@ import { UserData } from '../types/userData';
 import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import redisClient from '../config/redis';
 
 const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
+    const { email, username, password } = req.body;
+
     try {
-        const { email, username, password } = req.body;
+        const user = await User.findByEmail(email);
+        if (user) {
+            return res.status(400).json({ 
+                message: 'Error', 
+                error: 'User already exists' 
+            });
+        }
+        // Redis에서 이메일 인증 상태 확인
+        const isVerified = await redisClient.get(`verified_${email}`);
+        if (!isVerified) {
+            return res.status(400).json({
+                message: 'Error',
+                error: 'Email not verified. Please verify your email before registering.'
+            });
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = await User.create({ email, username, password: hashedPassword });
+
+        // Redis에서 인증 정보 삭제
+        await redisClient.del(`verified_${email}`);
+
         res.status(201).json({
             message: 'Success',
             data: {
@@ -23,7 +44,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
         res.status(500).json({ 
             message: 'Error',
             error: errorMessage,
-         });
+        });
     }
 };
 
