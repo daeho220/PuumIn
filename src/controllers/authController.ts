@@ -53,7 +53,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
     try {
         const { email, password } = req.body;
         const user = await User.findByEmail(email);
-        if (!user || !await bcrypt.compare(password, user.password)) {
+        if (!user || !user.password || !await bcrypt.compare(password, user.password)) {
             return res.status(401).json({ 
                 message: 'Error',
                 error: 'Invalid email or password' 
