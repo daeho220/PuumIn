@@ -1,33 +1,41 @@
 import { Request, Response } from 'express';
+import { ApiResponse } from '../types/apiResponse';
+import { UserData } from '../types/userData';
 import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const register = async (req: Request, res: Response) => {
+const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
     try {
         const { email, username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = await User.create({ email, username, password: hashedPassword });
         res.status(201).json({
-            id: userId,
-            email: email,
-            username: username,
-            message: 'Registration Success',
+            message: 'Success',
+            data: {
+                id: userId,
+                email: email,
+                username: username,
+            },
         });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({ 
-            error: error,
-            message: 'Registration failed'
+            message: 'Error',
+            error: errorMessage,
          });
     }
 };
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response<ApiResponse<object>>) => {
     try {
         const { email, password } = req.body;
         const user = await User.findByEmail(email);
         if (!user || !await bcrypt.compare(password, user.password)) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+            return res.status(401).json({ 
+                message: 'Error',
+                error: 'Invalid email or password' 
+            });
         }
 
         const secret = process.env.JWT_SECRET;
@@ -36,20 +44,29 @@ const login = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });
-        res.json({ token });
+        res.json({ 
+            message: 'Success', 
+            data: { JWTtoken: token } 
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Login failed' });
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
+        res.status(500).json({ 
+            message: 'Error', 
+            error: errorMessage 
+        });
     }
 };
 
-const logout = async (req: Request, res: Response) => {
+const logout = async (req: Request, res: Response<ApiResponse<string>>) => {
     try {
         res.status(200).send({
-            message: 'Logout successful. Please clear your token.'
+            message: 'Success',
         });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).send({
-            message: 'An error occurred during the logout process.', error: error
+            message: 'Error',
+            error: errorMessage
         });
     }
 };

@@ -47,7 +47,24 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             required:
+ *               - email
+ *               - username
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *                 example: "test@example.com"
+ *               username:
+ *                 type: string
+ *                 description: The user's username
+ *                 example: "testuser"
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *                 example: "password"
  *     responses:
  *       201:
  *         description: The user was successfully registered
@@ -56,21 +73,39 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 id:
- *                   type: integer
- *                 email:
- *                   type: string
- *                   example: 'test@example.com'
- *                 username:
- *                   type: string
- *                   example: 'testuser'
  *                 message:
  *                   type: string
- *                   example: 'Registration Success'                 
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: The ID of the newly registered user
+ *                       example: 1
+ *                     email:
+ *                       type: string
+ *                       description: The email of the newly registered user
+ *                       example: "test@example.com"
+ *                     username:
+ *                       type: string
+ *                       description: The username of the newly registered user
+ *                       example: "testuser"
  *       500:
- *         description: Some server error
+ *         description: Registration failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
  */
-
 router.post('/register', register);
 
 /**
@@ -92,28 +127,57 @@ router.post('/register', register);
  *               email:
  *                 type: string
  *                 description: The user's email
+ *                 example: "test@example.com"
  *               password:
  *                 type: string
  *                 description: The user's password
- *             example:
- *               email: "test@example.com"
- *               password: "password"
+ *                 example: "password"
  *     responses:
  *       200:
- *         description: The user was successfully logged in
+ *         description: Login successful
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 token:
+ *                 message:
  *                   type: string
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     JWTtoken:
+ *                       type: string
+ *                       description: JWT token for the user
+ *                       example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
  *       401:
  *         description: Invalid email or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: 'Invalid email or password'
  *       500:
- *         description: Some server error
+ *         description: Login failed due to server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
  */
-
 router.post('/login', login);
 
 /**
@@ -122,10 +186,9 @@ router.post('/login', login);
  *   post:
  *     summary: Logout a user
  *     tags: [Auth]
- *     description: Logs out the current user by instructing the client to delete the JWT token.
  *     responses:
  *       200:
- *         description: Logout successful. Please clear your token.
+ *         description: Logout successful
  *         content:
  *           application/json:
  *             schema:
@@ -133,21 +196,22 @@ router.post('/login', login);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: 'Logout successful. Please clear your token.'
+ *                   example: 'Success'
  *       500:
- *         description: An error occurred during the logout process.
+ *         description: Logout failed due to server error
  *         content:
  *           application/json:
  *             schema:
- *             type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: 'An error occurred during the logout process.'
- *               error:
- *                 type: string
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
  */
-
 router.post('/logout', logout);
 
 export default router;
