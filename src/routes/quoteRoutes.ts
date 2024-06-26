@@ -64,21 +64,41 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 currentPage:
- *                   type: integer
- *                   description: Current page number
- *                 totalPages:
- *                   type: integer
- *                   description: Total number of pages
- *                 totalItems:
- *                   type: integer
- *                   description: Total number of quotes
+ *                 message:
+ *                   type: string
+ *                   description: Response message
+ *                   example: 'Success'
  *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Quote'
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       description: Current page number
+ *                     totalPages:
+ *                       type: integer
+ *                       description: Total number of pages
+ *                     totalItemCount:
+ *                       type: integer
+ *                       description: Total number of quotes
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Quote'
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
  */
 router.get('/quotes', getAllPublicQuotes);
 
@@ -106,12 +126,15 @@ router.get('/quotes', getAllPublicQuotes);
  *               content:
  *                 type: string
  *                 description: The quote content
+ *                 example: "This is a sample quote."
  *               is_public:
  *                 type: boolean
  *                 description: Whether the quote is public
+ *                 example: true
  *               user_idx:
  *                 type: integer
  *                 description: The ID of the user who created the quote
+ *                 example: 1
  *     responses:
  *       201:
  *         description: The quote was successfully created
@@ -120,17 +143,43 @@ router.get('/quotes', getAllPublicQuotes);
  *             schema:
  *               type: object
  *               properties:
- *                 id:
- *                   type: integer
- *                   description: The ID of the newly created quote
  *                 message:
  *                   type: string
  *                   description: A success message
- *                   example: 'Success to create quote'
- *       401:
- *         description: Unauthorized
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       description: The ID of the newly created quote
+ *                     content:
+ *                       type: string
+ *                       description: The content of the quote
+ *                       example: "This is a sample quote."
+ *                     isPublic:
+ *                       type: boolean
+ *                       description: Whether the quote is public
+ *                       example: true
+ *                     userIdx:
+ *                       type: integer
+ *                       description: The ID of the user who created the quote
+ *                       example: 1
  *       500:
  *         description: Some server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
  */
 router.post('/quotes', authMiddleware, createQuote);
 
@@ -154,10 +203,51 @@ router.post('/quotes', authMiddleware, createQuote);
  *     responses:
  *       200:
  *         description: Quote deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       description: The ID of the deleted quote
  *       404:
  *         description: Quote not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Quote not found'
  *       500:
- *         description: Some server error
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error error message
+ *                   example: 'Unknown error'
  */
 router.delete('/quotes/:id', authMiddleware, deleteQuote);
 

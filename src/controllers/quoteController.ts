@@ -27,7 +27,7 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
         }));
 
         res.status(200).json({
-            message: 'Quotes got successfully',
+            message: 'Success',
             data: {
                 currentPage: page,
                 totalPages: totalPages,
@@ -38,7 +38,7 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({
-            message: 'Failed to get quotes',
+            message: 'Error',
             error: errorMessage
         });
     }
@@ -49,7 +49,7 @@ const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         const { content, is_public, user_idx } = req.body;
         const quoteId = await Quote.create({ content, is_public, user_idx });
         res.status(201).json({ 
-            message: 'Success to create quote',
+            message: 'Success',
             data: {
                 id: quoteId,
                 content: content,
@@ -60,7 +60,7 @@ const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({ 
-            message: 'Failed to create quote',
+            message: 'Error',
             error: errorMessage,
         });
     }
@@ -72,21 +72,21 @@ const deleteQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         const success = await Quote.deleteById(Number(id));
         if (success) {
             res.status(200).json({
-                message: 'Quote deleted successfully',
+                message: 'Success',
                 data: {
                     id: Number(id),
                 },
             });
         } else {
             res.status(404).json({ 
-                message: 'Failed to delete quote',
+                message: 'Error',
                 error: 'Quote not found',
             });
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).json({
-            message: 'Failed to delete quote',
+            message: 'Error',
             error: errorMessage,
         });
     }
@@ -99,14 +99,14 @@ const reportQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         if (reportsCount >= 10) {
             await Quote.updatePublicStatus(Number(id), false);
             res.status(200).send({
-                message: 'The quote has been set to private.',
+                message: 'Success',
                 data: {
                     id: Number(id),
                 },
             });
         } else {
             res.status(200).send({
-                message: 'Report has been registered.',
+                message: 'Success',
                 data: {
                     id: Number(id),
                     reportsCount: reportsCount,
@@ -116,7 +116,7 @@ const reportQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         res.status(500).send({
-            message: 'Server error occurred.',
+            message: 'Error',
             error: errorMessage,
         });
     }
