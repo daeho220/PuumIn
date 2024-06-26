@@ -5,6 +5,7 @@ import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import redisClient from '../config/redis';
+import axios from 'axios';
 
 const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
     const { email, username, password } = req.body;
@@ -91,5 +92,62 @@ const logout = async (req: Request, res: Response<ApiResponse<string>>) => {
         });
     }
 };
+
+const kakaoLogin = async (req: Request, res: Response) => {
+    const { accessToken } = req.body;
+
+    try {
+        // 카카오 API를 통해 액세스 토큰 검증 및 사용자 정보 획득
+        const userInfoResponse = await axios.get('https://kapi.kakao.com/v2/user/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+    
+        const { id: kakaoId, kakao_account: { email, profile: { nickname } } } = userInfoResponse.data;
+    
+        if (email || nickname) {
+            return res.status(400).json({ 
+                message: 'Error', 
+                error: 'User information needs to be verified' 
+            });
+        }
+    
+        let user = await User.findByEmail(email);
+        if (user) {
+            return res.status(400).json({ 
+                message: 'Error', 
+                error: 'User already exists' 
+            });
+        } else {
+            const userId = await User.createWithKakao(email, nickname);
+    
+            user = {
+                id: userId,
+                email: email,
+                username: nickname
+            };
+    
+            const secret = process.env.JWT_SECRET;
+            if (!secret) {
+                throw new Error('JWT_SECRET is not defined');
+            }
+            const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' });
+    
+            res.status(200).json({
+                message: 'Success',
+                data: { JWTtoken: token }
+            });
+        }
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
+        res.status(500).json({ 
+            message: 'Error', 
+            error: errorMessage 
+        });
+    }
+
+}
+
 
 export { register, login, logout };
