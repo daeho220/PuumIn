@@ -83,7 +83,34 @@ const router = express.Router();
  *                     items:
  *                       type: array
  *                       items:
- *                         $ref: '#/components/schemas/Quote'
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             description: The ID of the quote
+ *                           content:
+ *                             type: string
+ *                             description: The content of the quote
+ *                           author:
+ *                             type: string
+ *                             description: The author of the quote
+ *                           isPublic:
+ *                             type: boolean
+ *                             description: Whether the quote is public
+ *                           userIdx:
+ *                             type: integer
+ *                             description: The ID of the user who created the quote
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                             description: The creation date of the quote
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             description: The last update date of the quote
+ *                           reportsCount:
+ *                             type: integer
+ *                             description: The number of reports the quote has received
  *       500:
  *         description: Server error
  *         content:
