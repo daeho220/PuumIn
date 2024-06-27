@@ -4,7 +4,8 @@ import { UserData } from '../types/userData';
 import { v4 as uuidv4 } from 'uuid';
 
 const create = async (user: UserData): Promise<number> => {
-    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Users (email, username, password) VALUES (?, ?, ?)', [user.email, user.username, user.password]);
+    // const [result] = await pool.query<ResultSetHeader>('INSERT INTO Users (email, password) VALUES (?, ?, ?)', [user.email, user.username, user.password]);
+    const [result] = await pool.query<ResultSetHeader>('INSERT INTO Users (email, password) VALUES (?, ?)', [user.email, user.password]);
     return result.insertId;
 };
 

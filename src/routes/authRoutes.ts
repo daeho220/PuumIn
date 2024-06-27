@@ -50,17 +50,12 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - email
- *               - username
  *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 description: The user's email
  *                 example: "test@example.com"
- *               username:
- *                 type: string
- *                 description: The user's username
- *                 example: "testuser"
  *               password:
  *                 type: string
  *                 description: The user's password
@@ -87,10 +82,6 @@ const router = express.Router();
  *                       type: string
  *                       description: The email of the newly registered user
  *                       example: "test@example.com"
- *                     username:
- *                       type: string
- *                       description: The username of the newly registered user
- *                       example: "testuser"
  *       500:
  *         description: Registration failed
  *         content:

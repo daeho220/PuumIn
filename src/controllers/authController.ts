@@ -8,7 +8,8 @@ import redisClient from '../config/redis';
 import axios from 'axios';
 
 const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
-    const { email, username, password } = req.body;
+    // const { email, userName, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await User.findByEmail(email);
@@ -27,7 +28,8 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
             });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const userId = await User.create({ email, username, password: hashedPassword });
+        // const userId = await User.create({ email, userName, password: hashedPassword });
+        const userId = await User.create({ email, password: hashedPassword });
 
         // Redis에서 인증 정보 삭제
         await redisClient.del(`verified_${email}`);
@@ -37,7 +39,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
             data: {
                 id: userId,
                 email: email,
-                username: username,
+                // userName: userName,
             },
         });
     } catch (error) {
@@ -125,7 +127,7 @@ const kakaoLogin = async (req: Request, res: Response) => {
             user = {
                 id: userId,
                 email: email,
-                username: nickname
+                userName: nickname
             };
     
             const secret = process.env.JWT_SECRET;
