@@ -65,10 +65,10 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
             throw new Error('JWT_SECRET is not defined');
         }
 
-        const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, secret);
         res.json({ 
             message: 'Success', 
-            data: { JWTtoken: token } 
+            data: { token: token } 
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
@@ -132,11 +132,11 @@ const kakaoLogin = async (req: Request, res: Response) => {
             if (!secret) {
                 throw new Error('JWT_SECRET is not defined');
             }
-            const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' });
+            const token = jwt.sign({ userId: user.id }, secret);
     
             res.status(200).json({
                 message: 'Success',
-                data: { JWTtoken: token }
+                data: { token: token }
             });
         }
     } catch (error) {

@@ -146,7 +146,7 @@ router.post('/register', register);
  *                 data:
  *                   type: object
  *                   properties:
- *                     JWTtoken:
+ *                     token:
  *                       type: string
  *                       description: JWT token for the user
  *                       example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'

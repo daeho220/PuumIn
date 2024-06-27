@@ -12,22 +12,22 @@ const router = express.Router();
  *       type: object
  *       required:
  *         - content
- *         - is_public
- *         - user_idx
+ *         - isPublic
+ *         - userIdx
  *       properties:
  *         content:
  *           type: string
  *           description: The quote content
- *         is_public:
+ *         isPublic:
  *           type: boolean
  *           description: Whether the quote is public
- *         user_idx:
+ *         userIdx:
  *           type: integer
  *           description: The ID of the user who created the quote
  *       example:
  *         content: "This is a sample quote."
- *         is_public: true
- *         user_idx: 1
+ *         isPublic: true
+ *         userIdx: 1
  */
 
 /**
@@ -120,18 +120,18 @@ router.get('/quotes', getAllPublicQuotes);
  *             type: object
  *             required:
  *               - content
- *               - is_public
- *               - user_idx
+ *               - isPublic
+ *               - userIdx
  *             properties:
  *               content:
  *                 type: string
  *                 description: The quote content
  *                 example: "This is a sample quote."
- *               is_public:
+ *               isPublic:
  *                 type: boolean
  *                 description: Whether the quote is public
  *                 example: true
- *               user_idx:
+ *               userIdx:
  *                 type: integer
  *                 description: The ID of the user who created the quote
  *                 example: 1
