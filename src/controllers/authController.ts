@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { ApiResponse } from '../types/apiResponse';
 import { UserData } from '../types/userData';
+import { validatePassword } from '../utils/validatePassword';
+
 import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -27,6 +29,15 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
                 error: 'Email not verified. Please verify your email before registering.'
             });
         }
+
+        // 비밀번호 유효성 검사
+        if (!validatePassword(password)) {
+            return res.status(400).json({
+                message: 'Error',
+                error: 'Password must be at least 8 characters long and include at least one letter, one number, and one special character.'
+            });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         // const userId = await User.create({ email, userName, password: hashedPassword });
         const userId = await User.create({ email, password: hashedPassword });
