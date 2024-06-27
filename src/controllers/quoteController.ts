@@ -46,7 +46,14 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
 
 const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) => {
     try {
-        const { content, isPublic, userIdx } = req.body;
+        const { content, isPublic } = req.body;
+        const userIdx = parseInt(req.userIdx as string);
+        if (isNaN(userIdx)) { // userIdx가 숫자가 아닌 경우 오류 처리
+            return res.status(400).json({
+                message: 'Error',
+                error: 'Invalid user index',
+            });
+        }
         const quoteId = await Quote.create({ content, isPublic, userIdx });
         res.status(201).json({ 
             message: 'Success',

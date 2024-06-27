@@ -22,7 +22,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
             return res.status(401).json({ error: 'Failed to authenticate token' });
         }
         
-        req.userId = (decoded as JwtPayload).id;
+        req.userIdx = (decoded as JwtPayload).id;
         next();
     });
 };

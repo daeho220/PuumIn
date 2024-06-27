@@ -121,7 +121,6 @@ router.get('/quotes', getAllPublicQuotes);
  *             required:
  *               - content
  *               - isPublic
- *               - userIdx
  *             properties:
  *               content:
  *                 type: string
@@ -131,10 +130,6 @@ router.get('/quotes', getAllPublicQuotes);
  *                 type: boolean
  *                 description: Whether the quote is public
  *                 example: true
- *               userIdx:
- *                 type: integer
- *                 description: The ID of the user who created the quote
- *                 example: 1
  *     responses:
  *       201:
  *         description: The quote was successfully created
@@ -165,6 +160,21 @@ router.get('/quotes', getAllPublicQuotes);
  *                       type: integer
  *                       description: The ID of the user who created the quote
  *                       example: 1
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Invalid user index'
  *       500:
  *         description: Some server error
  *         content:
