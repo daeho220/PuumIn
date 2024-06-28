@@ -67,7 +67,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         const { email, password } = req.body;
         const user = await User.findByEmail(email);
 
-        if(user?.provider && !user.password){
+        if(user?.socialProvider && !user.password){
             return res.status(400).json({
                 message: 'Error',
                 error: 'User already exists with a different social provider'
@@ -115,18 +115,18 @@ const logout = async (req: Request, res: Response<ApiResponse<string>>) => {
 };
 
 const socialLogin = async (req: Request, res: Response) => {
-    const { accessToken, provider } = req.body;
+    const { accessToken, socialProvider } = req.body;
 
     try {
         let apiUrl = '';
-        if (provider === 'kakao') {
+        if (socialProvider === 'kakao') {
             apiUrl = 'https://kapi.kakao.com/v2/user/me';
-        } else if (provider === 'naver') {
+        } else if (socialProvider === 'naver') {
             apiUrl = 'https://openapi.naver.com/v1/nid/me';
         } else {
             return res.status(400).json({ 
                 message: 'Error', 
-                error: 'Invalid provider' 
+                error: 'Invalid socialProvider' 
             });
         }
 
@@ -138,7 +138,7 @@ const socialLogin = async (req: Request, res: Response) => {
 
         //테스트용 코드 sssssssssssssssss
         // let userInfoResponse;
-        // if(provider === 'kakao'){
+        // if(socialProvider === 'kakao'){
         //     userInfoResponse ={
         //         data: {
         //             id: 123,
@@ -148,7 +148,7 @@ const socialLogin = async (req: Request, res: Response) => {
         //         }
         //     };
 
-        // } else if (provider === 'naver'){
+        // } else if (socialProvider === 'naver'){
         //     userInfoResponse ={
         //         data: {
         //             response: {
@@ -168,7 +168,7 @@ const socialLogin = async (req: Request, res: Response) => {
         //테스트용 코드 eeeeeeeeeeeeeeeeeeee
 
 
-        const userInfo = extractUserInfo(userInfoResponse.data, provider);
+        const userInfo = extractUserInfo(userInfoResponse.data, socialProvider);
         if (!userInfo || !userInfo.socialId || !userInfo.email) {
             return res.status(400).json({ 
                 message: 'Error', 
@@ -176,7 +176,7 @@ const socialLogin = async (req: Request, res: Response) => {
             });
         }
         const { socialId, email } = userInfo;
-        createSocialUser(email, provider, socialId, res);
+        createSocialUser(email, socialProvider, socialId, res);
 
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
@@ -187,20 +187,21 @@ const socialLogin = async (req: Request, res: Response) => {
     }
 }
 
-const createSocialUser = async (email: string, provider: string, providerId: number, res: Response) => {
+const createSocialUser = async (email: string, socialProvider: string, socialId: number, res: Response) => {
     try {
         let user = await User.findByEmail(email);
+        console.log(user)
         if(user) {
             // 해당 이메일을 가진 유저가 존재하는 경우, 해당 유저의 소셜 로그인 정보를 업데이트
             if (user.id !== undefined) {
-                if (user.provider && user.provider !== provider) {
+                if (user.socialProvider && user.socialProvider !== socialProvider) {
                     // 소셜 로그인을 한 유저는 네이버, 카카오 중 한 곳에만 존재할 수 있음. 따라서, provider 체크를 하여, 다른 소셜 계정으로 로그인 시도 시 오류 메시지 반환
                     return res.status(400).json({
                         message: 'Error', 
                         error: 'User already exists with a different social provider' 
                     });
                 }
-                await User.updateSocialLoginInfo(user.id, provider, providerId);
+                await User.updateSocialLoginInfo(user.id, socialProvider, socialId);
             } else {
                 // 유저의 ID가 정의되지 않은 경우, 오류 메시지 반환
                 return res.status(400).json({ 
@@ -210,7 +211,7 @@ const createSocialUser = async (email: string, provider: string, providerId: num
             }
         } else {
             //유저가 존재하지 않는 경우, 새로운 소셜 로그인용 유저를 생성
-            const userId = await User.createWithSocial(email, provider, providerId);
+            const userId = await User.createWithSocial(email, socialProvider, socialId);
             user = {
                 id: userId,
                 email: email,
@@ -235,7 +236,7 @@ const createSocialUser = async (email: string, provider: string, providerId: num
     }
 };
 
-const extractUserInfo = (data: any, provider: string): { socialId: number | null, email: string | null } => {
+const extractUserInfo = (data: any, socialProvider: string): { socialId: number | null, email: string | null } => {
 
     const newUserData = (id: number, email: string) => {
         const userData = {
@@ -246,10 +247,10 @@ const extractUserInfo = (data: any, provider: string): { socialId: number | null
         return userData;
     };
 
-    if (provider === 'kakao') {
+    if (socialProvider === 'kakao') {
         const { id: kakaoId, kakao_account: { email } } = data;
         return newUserData(kakaoId, email);
-    } else if (provider === 'naver') {
+    } else if (socialProvider === 'naver') {
         const { response: { id, email } } = data;
         return newUserData(id, email);
     }

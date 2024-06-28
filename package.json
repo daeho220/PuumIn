@@ -5,7 +5,10 @@
     "build": "webpack",
     "start": "node dist/server.js",
     "dev": "ts-node-dev src/server.ts",
-    "test": "jest"
+    "test": "jest",
+    "docker:build": "docker build -t puumin .",
+    "docker:tag": "docker tag puumin dorant/puumin",
+    "docker:push": "docker push dorant/puumin"
   },
   "dependencies": {
     "axios": "^1.7.2",

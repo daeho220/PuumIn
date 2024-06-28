@@ -3,6 +3,6 @@ export interface UserData {
     email: string;
     userName?: string;
     password?: string;
-    provider?: string;
-    providerId?: number;
-}
+    socialProvider?: string;
+    socialId?: number;
+} 

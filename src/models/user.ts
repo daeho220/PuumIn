@@ -1,10 +1,8 @@
 import pool from '../config/db';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { UserData } from '../types/userData';
-import { v4 as uuidv4 } from 'uuid';
 
 const create = async (user: UserData): Promise<number> => {
-    // const [result] = await pool.query<ResultSetHeader>('INSERT INTO Users (email, password) VALUES (?, ?, ?)', [user.email, user.username, user.password]);
     const [result] = await pool.query<ResultSetHeader>('INSERT INTO Users (email, password) VALUES (?, ?)', [user.email, user.password]);
     return result.insertId;
 };
@@ -18,16 +16,16 @@ const deleteAll = async () => {
     await pool.query('DELETE FROM Users');
 };
 
-const createWithSocial = async (email: string, provider: string, providerId: number): Promise<number> => {
+const createWithSocial = async (email: string, socialProvider: string, socialId: number): Promise<number> => {
     const [result] = await pool.query<ResultSetHeader>(
-        'INSERT INTO Users (email, provider, provider_id) VALUES (?, ?, ?)', 
-        [email, provider, providerId]
+        'INSERT INTO Users (email, social_provider, social_id) VALUES (?, ?, ?)', 
+        [email, socialProvider, socialId]
     );
     return result.insertId;
 };
 
-const updateSocialLoginInfo = async (userId: number, provider: string, providerId: number): Promise<void> => {
-    await pool.query<ResultSetHeader>('UPDATE Users SET provider = ?, provider_id = ? WHERE id = ?', [provider, providerId, userId]);
+const updateSocialLoginInfo = async (userId: number, socialProvider: string, socialId: number): Promise<void> => {
+    await pool.query<ResultSetHeader>('UPDATE Users SET social_provider = ?, social_id = ? WHERE id = ?', [socialProvider, socialId, userId]);
 };
 
 export default { create, findByEmail, deleteAll, createWithSocial, updateSocialLoginInfo};
