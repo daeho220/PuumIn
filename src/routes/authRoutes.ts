@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, logout } from '../controllers/authController';
+import { register, login, logout, socialLogin } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -154,6 +154,7 @@ router.post('/register', register);
  *                 error:
  *                   type: string
  *                   description: 'Invalid email or password'
+ *                   example: 'Invalid email or password'
  *       500:
  *         description: Login failed due to server error
  *         content:
@@ -170,6 +171,79 @@ router.post('/register', register);
  *                   example: 'Unknown error'
  */
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /auth/social-login:
+ *   post:
+ *     summary: Social login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - accessToken
+ *               - provider
+ *             properties:
+ *               accessToken:
+ *                 type: string
+ *                 description: The access token from the social provider
+ *                 example: "AccessToken"
+ *               provider:
+ *                 type: string
+ *                 description: The social provider (e.g., kakao, naver)
+ *                 example: "kakao"
+ *     responses:
+ *       200:
+ *         description: Social login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ *                       description: JWT token for the user
+ *                       example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+ *       400:
+ *         description: Invalid provider or user information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
+ *       500:
+ *         description: Social login failed due to server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   description: Detailed error message
+ *                   example: 'Unknown error'
+ */
+router.post('/social-login', socialLogin);
 
 /**
  * @swagger

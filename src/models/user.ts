@@ -18,17 +18,16 @@ const deleteAll = async () => {
     await pool.query('DELETE FROM Users');
 };
 
-const createWithKakao = async (email: string, username: string): Promise<number> => {
-    const dummyPassword = uuidv4(); // 임의의 비밀번호 생성
+const createWithSocial = async (email: string, provider: string, providerId: number): Promise<number> => {
     const [result] = await pool.query<ResultSetHeader>(
-        'INSERT INTO Users (email, username, password) VALUES (?, ?, ?)', 
-        [email, username, dummyPassword]
+        'INSERT INTO Users (email, provider, provider_id) VALUES (?, ?, ?)', 
+        [email, provider, providerId]
     );
     return result.insertId;
 };
 
-const updateSocialLoginInfo = async (userId: number, provider: string, providerId: string): Promise<void> => {
-    await pool.query<ResultSetHeader>('UPDATE Users SET provider = ?, providerId = ? WHERE id = ?', [provider, providerId, userId]);
+const updateSocialLoginInfo = async (userId: number, provider: string, providerId: number): Promise<void> => {
+    await pool.query<ResultSetHeader>('UPDATE Users SET provider = ?, provider_id = ? WHERE id = ?', [provider, providerId, userId]);
 };
 
-export default { create, findByEmail, deleteAll, createWithKakao, updateSocialLoginInfo};
+export default { create, findByEmail, deleteAll, createWithSocial, updateSocialLoginInfo};
