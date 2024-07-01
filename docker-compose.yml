@@ -1,18 +1,16 @@
 version: '3'
 services:
-  api:
-    build: .
+  puumin:
+    image: dorant/puumin:latest
+    container_name: puumin-container
     ports:
-      - '3000:3000'
+      - "3000:3000"
+    volumes:
+      - ./logs:/app/puumin/logs
     env_file:
       - .env
-    depends_on:
-      - db
-  db:
-    image: mysql:5.7
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: admin01!
-      MYSQL_DATABASE: forProject
-    ports:
-      - '3306:3306'
+      DB_HOST: 172.31.11.67
+      DB_USER: root
+      DB_PASSWORD: Admin01!
+      DB_NAME: forProject
