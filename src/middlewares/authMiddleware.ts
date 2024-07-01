@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import logMessage from '../config/logger';
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
@@ -14,11 +15,16 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
     const secret = process.env.JWT_SECRET;
     if (!secret) {
-        throw new Error('JWT_SECRET is not defined');
+        logMessage({code: 418, msg: ""});
+        return res.status(500).json({
+            message: 'Error',
+            error: 'JWT_SECRET is not defined'
+        });
     }
 
     jwt.verify(token, secret, (err, decoded) => {
         if (err || !decoded) {
+            logMessage({code: 419, msg: ""});
             return res.status(401).json({ error: 'Failed to authenticate token' });
         }
         

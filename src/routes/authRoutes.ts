@@ -186,13 +186,13 @@ router.post('/login', login);
  *             type: object
  *             required:
  *               - accessToken
- *               - provider
+ *               - socialProvider
  *             properties:
  *               accessToken:
  *                 type: string
  *                 description: The access token from the social provider
  *                 example: "AccessToken"
- *               provider:
+ *               socialProvider:
  *                 type: string
  *                 description: The social provider (e.g., kakao, naver)
  *                 example: "kakao"
