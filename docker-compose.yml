@@ -14,3 +14,9 @@ services:
       DB_USER: root
       DB_PASSWORD: Admin01!
       DB_NAME: forProject
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
