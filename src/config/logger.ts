@@ -62,6 +62,8 @@ const logs: { [key: number]: string } = {
     417: "verifyCode: Try Catch Error.",
     418: "authMiddleware: JWT_SECRET is not defined",
     419: "authMiddleware: Failed to authenticate token",
+    420: "authMiddleware: No Header provided",
+    421: "authMiddleware: No token provided",
     
     //Quotes error
     500: "getAllPublicQuotes: Try Catch Error.",

@@ -5,11 +5,13 @@ import logMessage from '../config/logger';
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
-        return res.status(401).json({ error: 'No token provided' });
+        logMessage({code: 420, msg: ""});
+        return res.status(401).json({ error: 'No Header provided' });
     }
 
     const token = authHeader.split(' ')[1]; // 'Bearer ' 부분을 제거
     if (!token) {
+        logMessage({code: 421, msg: ""});
         return res.status(401).json({ error: 'No token provided' });
     }
 
