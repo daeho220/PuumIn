@@ -31,6 +31,7 @@ const logs: { [key: number]: string } = {
     103: "createSocialUser: Success to create Social User",
     104: "sendCode: Success to send the verification code",
     105: "verifyCode: The verification code matches.",
+    106: "deleteUser: User ID deleted.",
 
     //Quotes info
     200: "getAllPublicQuotes: Success to get Quotes",
@@ -64,6 +65,10 @@ const logs: { [key: number]: string } = {
     419: "authMiddleware: Failed to authenticate token",
     420: "authMiddleware: No Header provided",
     421: "authMiddleware: No token provided",
+    422: "deleteUser: Invalid user ID",
+    423: "deleteUser: User ID not found",
+    424: "deleteUser: Try Catch Error.",
+    425: "deleteUser: Quote deleteByUserId Try Catch Error.",
     
     //Quotes error
     500: "getAllPublicQuotes: Try Catch Error.",

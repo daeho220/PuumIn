@@ -1,5 +1,6 @@
 import express from 'express';
-import { register, login, logout, socialLogin } from '../controllers/authController';
+import { register, login, logout, socialLogin, deleteUser } from '../controllers/authController';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
@@ -278,5 +279,72 @@ router.post('/social-login', socialLogin);
  *                   example: 'Unknown error'
  */
 router.post('/logout', logout);
+
+/**
+ * @swagger
+ * /auth/delete:
+ *   delete:
+ *     summary: Delete user account
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User account successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Success'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     userIdx:
+ *                       type: number
+ *                       example: 1
+ *       401:
+ *         description: Authentication failed or invalid user ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   example: 'Invalid user ID'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   example: 'User ID 1 not found'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Error'
+ *                 error:
+ *                   type: string
+ *                   example: 'Unknown error'
+ */
+router.delete('/delete', authMiddleware, deleteUser);
 
 export default router;

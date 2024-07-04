@@ -16,6 +16,11 @@ const deleteAll = async () => {
     await pool.query('DELETE FROM Users');
 };
 
+const deleteById = async (userIdx: number): Promise<boolean> => {
+    const [result] = await pool.query<ResultSetHeader>('DELETE FROM Users WHERE id = ?', [userIdx]);
+    return result.affectedRows > 0;
+};
+
 const createWithSocial = async (email: string, socialProvider: string, socialId: number): Promise<number> => {
     const [result] = await pool.query<ResultSetHeader>(
         'INSERT INTO Users (email, social_provider, social_id) VALUES (?, ?, ?)', 
@@ -28,4 +33,4 @@ const updateSocialLoginInfo = async (userId: number, socialProvider: string, soc
     await pool.query<ResultSetHeader>('UPDATE Users SET social_provider = ?, social_id = ? WHERE id = ?', [socialProvider, socialId, userId]);
 };
 
-export default { create, findByEmail, deleteAll, createWithSocial, updateSocialLoginInfo};
+export default { create, findByEmail, deleteAll, createWithSocial, updateSocialLoginInfo, deleteById};

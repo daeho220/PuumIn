@@ -40,6 +40,11 @@ const deleteById = async (id: number) => {
     return result.affectedRows > 0;
 };
 
+const deleteByUserId = async (userIdx: number) => {
+    const [result] = await pool.query<ResultSetHeader>('DELETE FROM Quotes WHERE user_idx = ?', [userIdx]);
+    return result.affectedRows;
+};
+
 const deleteAll = async () => {
     await pool.query('DELETE FROM Quotes');
 };
@@ -59,4 +64,4 @@ const updatePublicStatus = async (id: number, isPublic: boolean) => {
     await pool.query<ResultSetHeader>('UPDATE Quotes SET is_public = ? WHERE id = ?', [isPublic ? 1 : 0, id]);
 };
 
-export default { create, findAllPublic, deleteById, deleteAll, reportById, updatePublicStatus };
+export default { create, findAllPublic, deleteById, deleteAll, reportById, updatePublicStatus, deleteByUserId };

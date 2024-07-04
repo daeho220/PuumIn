@@ -5,6 +5,7 @@ import { validatePassword } from '../utils/validatePassword';
 import logMessage from '../config/logger';
 
 import User from '../models/user';
+import Quote from '../models/quote';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import redisClient from '../config/redis';
@@ -294,4 +295,58 @@ const extractUserInfo = (data: any, socialProvider: string): { socialId: number 
     return { socialId: null, email: null };
 };
 
-export { register, login, logout, socialLogin };
+const deleteUser = async (req: Request, res: Response<ApiResponse<object>>) => {
+    try {
+        const userIdx = Number(req.userIdx);
+
+        if (isNaN(userIdx)) {
+            logMessage({code: 422, msg: ""});
+            return res.status(401).json({
+                message: 'Error',
+                error: 'Invalid user ID'
+            });
+        }
+
+        try {
+            // 관련된 quotes 먼저 삭제
+            await Quote.deleteByUserId(userIdx);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
+            logMessage({code: 425, msg: `Error: ${errorMessage}`});
+    
+            return res.status(500).json({
+                message: 'Error',
+                error: errorMessage
+            });
+        }
+
+        const deletedUser = await User.deleteById(userIdx);
+
+        if (!deletedUser) {
+            logMessage({code: 423, msg: `userIdx: ${userIdx}`});
+            return res.status(404).json({
+                message: 'Error',
+                error: `User ID ${userIdx} not found`
+            });
+        }
+
+        logMessage({code: 106, msg: `userIdx: ${userIdx}`});
+        res.status(200).json({
+            message: 'Success',
+            data: {
+                userIdx: userIdx
+            }
+        });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
+        logMessage({code: 424, msg: `Error: ${errorMessage}`});
+
+        res.status(500).json({
+            message: 'Error',
+            error: errorMessage
+        });
+    }
+
+};
+
+export { register, login, logout, socialLogin, deleteUser };
