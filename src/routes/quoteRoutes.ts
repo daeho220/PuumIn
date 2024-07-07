@@ -64,10 +64,10 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Response message
- *                   example: 'Success'
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -118,10 +118,10 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Error message
- *                   example: 'Error'
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -165,10 +165,10 @@ router.get('/quotes', getAllPublicQuotes);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: A success message
- *                   example: 'Success'
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -194,10 +194,10 @@ router.get('/quotes', getAllPublicQuotes);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Error message
- *                   example: 'Error'
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -209,10 +209,10 @@ router.get('/quotes', getAllPublicQuotes);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Detailed error message
- *                   example: 'Error'
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -245,10 +245,10 @@ router.post('/quotes', authMiddleware, createQuote);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: A success message
- *                   example: 'Success'
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -262,10 +262,10 @@ router.post('/quotes', authMiddleware, createQuote);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Error message
- *                   example: 'Error'
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -277,10 +277,10 @@ router.post('/quotes', authMiddleware, createQuote);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
+ *                 success:
+ *                   type: boolean
  *                   description: Error message
- *                   example: 'Error'
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error error message

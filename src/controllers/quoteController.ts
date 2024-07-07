@@ -29,7 +29,7 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
 
         logMessage({code:200, msg:""});
         res.status(200).json({
-            message: 'Success',
+            success: true,
             data: {
                 currentPage: page,
                 totalPages: totalPages,
@@ -42,7 +42,7 @@ const getAllPublicQuotes = async (req: Request, res: Response<ApiResponse<PagedD
         logMessage({code:500, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({
-            message: 'Error',
+            success: false,
             error: errorMessage
         });
     }
@@ -56,7 +56,7 @@ const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
             logMessage({code:501, msg:""});
 
             return res.status(400).json({
-                message: 'Error',
+                success: false,
                 error: 'Invalid user index',
             });
         }
@@ -64,7 +64,7 @@ const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         
         logMessage({code:201, msg:""});
         res.status(201).json({ 
-            message: 'Success',
+            success: true,
             data: {
                 id: quoteId,
                 content: content,
@@ -77,7 +77,7 @@ const createQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         logMessage({code:502, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error',
+            success: false,
             error: errorMessage,
         });
     }
@@ -90,7 +90,7 @@ const deleteQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         if (success) {
             logMessage({code:202, msg:`QuoteId: ${id}`});
             res.status(200).json({
-                message: 'Success',
+                success: true,
                 data: {
                     id: Number(id),
                 },
@@ -98,7 +98,7 @@ const deleteQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         } else {
             logMessage({code:503, msg:`QuoteId: ${id}`});
             res.status(404).json({ 
-                message: 'Error',
+                success: false,
                 error: 'Quote not found',
             });
         }
@@ -107,7 +107,7 @@ const deleteQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         logMessage({code:502, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({
-            message: 'Error',
+            success: false,
             error: errorMessage,
         });
     }
@@ -122,7 +122,7 @@ const reportQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
 
             logMessage({code:203, msg:`QuoteId: ${Number(id)}, reportsCount: ${reportsCount}`});
             res.status(200).send({
-                message: 'Success',
+                success: true,
                 data: {
                     id: Number(id),
                 },
@@ -130,7 +130,7 @@ const reportQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         } else {
             logMessage({code:204, msg:`QuoteId: ${Number(id)}, reportsCount: ${reportsCount}`});
             res.status(200).send({
-                message: 'Success',
+                success: true,
                 data: {
                     id: Number(id),
                     reportsCount: reportsCount,
@@ -142,7 +142,7 @@ const reportQuote = async (req: Request, res: Response<ApiResponse<QuoteData>>) 
         logMessage({code:502, msg:`Error: ${errorMessage}`});
 
         res.status(500).send({
-            message: 'Error',
+            success: false,
             error: errorMessage,
         });
     }

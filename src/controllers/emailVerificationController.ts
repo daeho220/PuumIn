@@ -18,14 +18,14 @@ const sendCode = async (req: Request, res: Response) => {
 
         logMessage({code:104, msg:`userEmail: ${email}`});
         res.status(200).json({
-             message: 'Success'
+            success: true,
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         logMessage({code:415, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error',
+            success: false,
             error: errorMessage
         });
     }
@@ -41,7 +41,7 @@ const verifyCode = async (req: Request, res: Response) => {
             logMessage({code:416, msg:`userEmail: ${email}`});
 
             return res.status(400).json({ 
-                message: 'Error', 
+                success: false, 
                 error: 'Invalid verification code' 
             });
         }
@@ -52,14 +52,14 @@ const verifyCode = async (req: Request, res: Response) => {
 
         logMessage({code:105, msg:`userEmail: ${email}`});
         res.status(200).json({
-            message: 'Success',
+            success: true,
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         logMessage({code:417, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error',
+            success: false,
             error: errorMessage
         });
     }

@@ -29,9 +29,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *       500:
  *         description: Failed to send verification code
  *         content:
@@ -39,9 +39,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -79,9 +79,9 @@ router.post('/send-code', sendCode);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *       400:
  *         description: Invalid verification code
  *         content:
@@ -89,9 +89,9 @@ router.post('/send-code', sendCode);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: 'Invalid verification code'
@@ -103,9 +103,9 @@ router.post('/send-code', sendCode);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message

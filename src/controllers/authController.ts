@@ -19,8 +19,8 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
         const user = await User.findByEmail(email);
         if (user) {
             logMessage({code:400, msg:`UserEmail: ${email}`});
-            return res.status(400).json({ 
-                message: 'Error', 
+            return res.status(400).json({
+                success: false, 
                 error: 'User already exists' 
             });
         }
@@ -29,7 +29,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
         if (!isVerified) {
             logMessage({code:401, msg:""});
             return res.status(400).json({
-                message: 'Error',
+                success: false,
                 error: 'Email not verified. Please verify your email before registering.'
             });
         }
@@ -38,7 +38,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
         if (!validatePassword(password)) {
             logMessage({code:402, msg:""});
             return res.status(400).json({
-                message: 'Error',
+                success: false,
                 error: 'Password must be at least 8 characters long and include at least one letter, one number, and one special character.'
             });
         }
@@ -52,7 +52,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
 
         logMessage({code:100, msg:`userId: ${userId}`});
         res.status(201).json({
-            message: 'Success',
+            success: true,
             data: {
                 id: userId,
                 email: email,
@@ -64,7 +64,7 @@ const register = async (req: Request, res: Response<ApiResponse<UserData>>) => {
         logMessage({code:403, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error',
+            success: false,
             error: errorMessage,
         });
     }
@@ -78,7 +78,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         if(user?.socialProvider && !user.password){
             logMessage({code:404, msg:`userEmail: ${email}`});
             return res.status(400).json({
-                message: 'Error',
+                success: false,
                 error: 'User already exists with a different social provider'
             });
         }
@@ -86,7 +86,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         if (!user || !user.password || !await bcrypt.compare(password, user.password)) {
             logMessage({code:405, msg:""});
             return res.status(401).json({ 
-                message: 'Error',
+                success: false,
                 error: 'Invalid email or password' 
             });
         }
@@ -95,7 +95,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         if (!secret) {
             logMessage({code: 406, msg: ""});
             return res.status(500).json({
-                message: 'Error',
+                success: false,
                 error: 'JWT_SECRET is not defined'
             });
         }
@@ -104,7 +104,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         logMessage({code:101, msg:`userEmail: ${email}`});
 
         res.json({ 
-            message: 'Success', 
+            success: true, 
             data: { token: token } 
         });
     } catch (error) {
@@ -113,7 +113,7 @@ const login = async (req: Request, res: Response<ApiResponse<object>>) => {
         logMessage({code:407, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error', 
+            success: false,
             error: errorMessage 
         });
     }
@@ -123,14 +123,14 @@ const logout = async (req: Request, res: Response<ApiResponse<string>>) => {
     try {
         logMessage({code:102, msg:""});
         res.status(200).send({
-            message: 'Success',
+            success: true,
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.toString() : 'Unknown error';
         logMessage({code:408, msg:""});
 
         res.status(500).send({
-            message: 'Error',
+            success: false,
             error: errorMessage
         });
     }
@@ -148,7 +148,7 @@ const socialLogin = async (req: Request, res: Response) => {
         } else {
             logMessage({code:409, msg:""});
             return res.status(400).json({ 
-                message: 'Error', 
+                success: false,
                 error: 'Invalid socialProvider' 
             });
         }
@@ -184,7 +184,7 @@ const socialLogin = async (req: Request, res: Response) => {
 
         // if (!userInfoResponse) {
         //     return res.status(400).json({ 
-        //         message: 'Error', 
+        //         success: false,
         //         error: 'User info response is undefined' 
         //     });
         // }
@@ -196,7 +196,7 @@ const socialLogin = async (req: Request, res: Response) => {
             logMessage({code:410, msg:""});
 
             return res.status(400).json({ 
-                message: 'Error', 
+                success: false,
                 error: 'Invalid user information' 
             });
         }
@@ -207,7 +207,7 @@ const socialLogin = async (req: Request, res: Response) => {
         logMessage({code:413, msg:`Error: ${errorMessage}`});
 
         res.status(500).json({ 
-            message: 'Error', 
+            success: false,
             error: errorMessage 
         });
     }
@@ -225,7 +225,7 @@ const createSocialUser = async (email: string, socialProvider: string, socialId:
                     logMessage({code:410, msg:""});
 
                     return res.status(400).json({
-                        message: 'Error', 
+                        success: false,
                         error: 'User already exists with a different social provider' 
                     });
                 }
@@ -235,7 +235,7 @@ const createSocialUser = async (email: string, socialProvider: string, socialId:
                 logMessage({code:411, msg:""});
 
                 return res.status(400).json({ 
-                    message: 'Error', 
+                    success: false,
                     error: 'User ID is undefined' 
                 });
             }
@@ -252,7 +252,7 @@ const createSocialUser = async (email: string, socialProvider: string, socialId:
         if (!secret) {
             logMessage({code: 406, msg: ""});
             return res.status(500).json({
-                message: 'Error',
+                success: false,
                 error: 'JWT_SECRET is not defined'
             });
         }
@@ -260,7 +260,7 @@ const createSocialUser = async (email: string, socialProvider: string, socialId:
         const token = jwt.sign({ userId: user.id }, secret);
         logMessage({code:103, msg:`userEmail: ${email}, socialProvider: ${socialProvider}`});
         res.status(200).json({
-            message: 'Success',
+            success: true,
             data: { token: token }
         });
     } catch (error) {
@@ -268,7 +268,7 @@ const createSocialUser = async (email: string, socialProvider: string, socialId:
         logMessage({code:414, msg:`Error: ${errorMessage}`});
         
         res.status(500).json({ 
-            message: 'Error', 
+            success: false,
             error: errorMessage 
         });
     }
@@ -302,7 +302,7 @@ const deleteUser = async (req: Request, res: Response<ApiResponse<object>>) => {
         if (isNaN(userIdx)) {
             logMessage({code: 422, msg: ""});
             return res.status(401).json({
-                message: 'Error',
+                success: false,
                 error: 'Invalid user ID'
             });
         }
@@ -315,7 +315,7 @@ const deleteUser = async (req: Request, res: Response<ApiResponse<object>>) => {
             logMessage({code: 425, msg: `Error: ${errorMessage}`});
     
             return res.status(500).json({
-                message: 'Error',
+                success: false,
                 error: errorMessage
             });
         }
@@ -325,14 +325,14 @@ const deleteUser = async (req: Request, res: Response<ApiResponse<object>>) => {
         if (!deletedUser) {
             logMessage({code: 423, msg: `userIdx: ${userIdx}`});
             return res.status(404).json({
-                message: 'Error',
+                success: false,
                 error: `User ID ${userIdx} not found`
             });
         }
 
         logMessage({code: 106, msg: `userIdx: ${userIdx}`});
         res.status(200).json({
-            message: 'Success',
+            success: true,
             data: {
                 userIdx: userIdx
             }
@@ -342,7 +342,7 @@ const deleteUser = async (req: Request, res: Response<ApiResponse<object>>) => {
         logMessage({code: 424, msg: `Error: ${errorMessage}`});
 
         res.status(500).json({
-            message: 'Error',
+            success: false,
             error: errorMessage
         });
     }

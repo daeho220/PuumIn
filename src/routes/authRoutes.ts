@@ -69,9 +69,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -90,9 +90,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -132,9 +132,9 @@ router.post('/register', register);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -149,9 +149,9 @@ router.post('/register', register);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: 'Invalid email or password'
@@ -163,9 +163,9 @@ router.post('/register', register);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -205,9 +205,9 @@ router.post('/login', login);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -222,9 +222,9 @@ router.post('/login', login);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -236,9 +236,9 @@ router.post('/login', login);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -260,9 +260,9 @@ router.post('/social-login', socialLogin);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *       500:
  *         description: Logout failed due to server error
  *         content:
@@ -270,9 +270,9 @@ router.post('/social-login', socialLogin);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   description: Detailed error message
@@ -296,9 +296,9 @@ router.post('/logout', logout);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Success'
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -312,9 +312,9 @@ router.post('/logout', logout);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   example: 'Invalid user ID'
@@ -325,9 +325,9 @@ router.post('/logout', logout);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   example: 'User ID 1 not found'
@@ -338,9 +338,9 @@ router.post('/logout', logout);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Error'
+ *                 success:
+ *                   type: boolean
+ *                   example: false
  *                 error:
  *                   type: string
  *                   example: 'Unknown error'
