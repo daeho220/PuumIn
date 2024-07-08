@@ -145,6 +145,8 @@ const socialLogin = async (req: Request, res: Response) => {
             apiUrl = 'https://kapi.kakao.com/v2/user/me';
         } else if (socialProvider === 'naver') {
             apiUrl = 'https://openapi.naver.com/v1/nid/me';
+        } else if (socialProvider === 'google') {
+            apiUrl = 'https://www.googleapis.com/userinfo/v2/me';
         } else {
             logMessage({code:409, msg:""});
             return res.status(400).json({ 
@@ -291,7 +293,11 @@ const extractUserInfo = (data: any, socialProvider: string): { socialId: number 
     } else if (socialProvider === 'naver') {
         const { response: { id, email } } = data;
         return newUserData(id, email);
+    } else if (socialProvider === 'google') {
+        const { id, email } = data;
+        return newUserData(parseInt(id), email);
     }
+
     return { socialId: null, email: null };
 };
 
